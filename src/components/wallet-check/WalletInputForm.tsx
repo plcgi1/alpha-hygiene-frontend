@@ -1,13 +1,16 @@
 import React, { useState } from 'react';
 import { Button } from '../common/Button';
 import { Input } from '../common/Input';
+import { CONFIG } from '../../config';
 
 interface WalletInputFormProps {
   onSubmit: (address: string, isPremium: boolean) => void;
+  onPaymentSubmit: (address: string) => Promise<void>;
   isLoading: boolean;
+  isChecking: boolean
 }
 
-export const WalletInputForm: React.FC<WalletInputFormProps> = ({ onSubmit, isLoading }) => {
+export const WalletInputForm: React.FC<WalletInputFormProps> = ({ onSubmit, onPaymentSubmit, isLoading, isChecking }) => {
   const [address, setAddress] = useState('');
   const [error, setError] = useState<string | null>(null);
 
@@ -25,14 +28,15 @@ export const WalletInputForm: React.FC<WalletInputFormProps> = ({ onSubmit, isLo
     onSubmit(address, false);
   };
 
-  const handlePremiumCheck = (e: React.FormEvent) => {
+  const handlePremiumCheck = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validateAddress(address)) {
       setError('Please enter a valid Ethereum address');
       return;
     }
     setError(null);
-    onSubmit(address, true);
+    
+    await onPaymentSubmit(address);
   };
 
   return (
@@ -52,7 +56,8 @@ export const WalletInputForm: React.FC<WalletInputFormProps> = ({ onSubmit, isLo
           type="submit"
           onClick={handleFreeCheck}
           disabled={!address || isLoading}
-          className="flex-1"
+          className="flex-1 text-sm"
+          size="sm"
         >
           {isLoading ? "loading" : 'Check for Free'}
         </Button>
@@ -61,9 +66,10 @@ export const WalletInputForm: React.FC<WalletInputFormProps> = ({ onSubmit, isLo
           onClick={handlePremiumCheck}
           disabled={!address || isLoading}
           variant="premium"
-          className="flex-1"
+          className="flex-1 text-sm"
+          size="sm"
         >
-          {isLoading ? "loading" : 'Get Full Report ($5)'}
+          {(isLoading || isChecking) ? "loading" : `Get Full Report (${CONFIG.PREMIUM.PRICE})`}
         </Button>
       </div>
     </form>

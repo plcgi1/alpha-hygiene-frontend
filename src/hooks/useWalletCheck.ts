@@ -7,12 +7,12 @@ export const useWalletCheck = () => {
   const [data, setData] = useState<APIResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  const checkWallet = useCallback(async (address: string, isPremium: boolean = false) => {
+  const checkWallet = useCallback(async (address: string, orderId: string) => {
     setIsLoading(true);
     setError(null);
 
     try {
-      const response = await walletHealthService.checkWallet(address, isPremium);
+      const response = await walletHealthService.checkWallet(address, orderId);
       setData(response);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred');

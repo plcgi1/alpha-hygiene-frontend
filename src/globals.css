@@ -32,3 +32,8 @@ body {
     @apply p-4 pb-24;
   }
 }
+
+.wif button {
+  padding-top: 30px;
+  padding-bottom: 30px;
+}

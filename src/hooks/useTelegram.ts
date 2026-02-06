@@ -7,6 +7,9 @@ interface TelegramHookReturn {
   user: any;
 }
 
+const tgAuthKey = import.meta.env.VITE_TG_AUTH_KEY
+export const initUserAuthData = window.Telegram?.WebApp?.initData || tgAuthKey || '';
+
 export function useTelegram(): TelegramHookReturn {
   const [isTwa, setIsTwa] = useState(false);
   const [tg, setTg] = useState<any>(null);
@@ -40,9 +43,11 @@ export function useTelegram(): TelegramHookReturn {
         try {
           const params = new URLSearchParams(webApp.initData);
           const userData = params.get('user');
+          
           if (userData) {
             setUser(JSON.parse(userData));
           }
+          console.info('userData', user)
         } catch (error) {
           console.error('Failed to parse user data:', error);
         }

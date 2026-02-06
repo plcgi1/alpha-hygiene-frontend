@@ -26,11 +26,11 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       ghost: 'hover:bg-accent hover:text-accent-foreground',
     };
 
-    const sizeStyles = {
-      sm: 'h-9 px-3 text-sm',
-      md: 'h-10 px-4 py-2',
-      lg: 'h-12 px-8 text-lg',
-    };
+     const sizeStyles = {
+       sm: 'h-10 px-3 py-2 text-sm',
+       md: 'h-10 px-4 py-2',
+       lg: 'h-12 px-8 text-lg',
+     };
 
     return (
       <button

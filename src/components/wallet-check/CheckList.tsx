@@ -5,13 +5,11 @@ import type { CheckResult } from '../../types/api';
 
 interface CheckListProps {
   checks: CheckResult[];
-  locale: string;
   title?: string;
 }
 
 export const CheckList: React.FC<CheckListProps> = ({
   checks,
-  locale = 'en',
   title,
 }) => {
   if (checks.length === 0) {
@@ -36,7 +34,7 @@ export const CheckList: React.FC<CheckListProps> = ({
       <CardContent className="p-4 pt-0">
         <div className="space-y-4">
           {sortedChecks.map((check, index) => (
-            <CheckItem key={index} check={check} locale={locale} />
+            <CheckItem key={index} check={check} />
           ))}
         </div>
         <div className="mt-6 pt-4 border-t border-gray-200">

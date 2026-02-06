@@ -4,18 +4,17 @@ import { CheckList } from './CheckList';
 import { Card, CardContent, CardHeader } from '../common/Card';
 import { Button } from '../common/Button';
 import type { APIResponse } from '../../types/api';
+import { CONFIG } from '../../config';
 
 interface ReportViewProps {
   data: APIResponse;
   isPremium: boolean;
-  locale: string;
   onBack: () => void;
 }
 
 export const ReportView: React.FC<ReportViewProps> = ({
   data,
   isPremium,
-  locale,
   onBack,
 }) => {
   return (
@@ -40,7 +39,7 @@ export const ReportView: React.FC<ReportViewProps> = ({
           <CardContent className="p-4 pt-0">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-2xl font-bold text-purple-600">$5</p>
+                <p className="text-2xl font-bold text-purple-600">{CONFIG.PREMIUM.PRICE}</p>
                 <p className="text-sm text-gray-600">
                   One-time payment
                   </p>
@@ -53,11 +52,10 @@ export const ReportView: React.FC<ReportViewProps> = ({
         </Card>
       )}
 
-      <ScoreCard data={data} locale={locale} />
+      <ScoreCard data={data} />
 
       <CheckList
         checks={data.checks}
-        locale={locale}
         title="Risk Analysis"
       />
 
@@ -74,7 +72,7 @@ export const ReportView: React.FC<ReportViewProps> = ({
           <CardContent className="p-4 pt-0">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-2xl font-bold text-purple-600">$5</p>
+                <p className="text-2xl font-bold text-purple-600">{CONFIG.PREMIUM.PRICE}</p>
                 <p className="text-sm text-gray-600">
                   One-time payment
                 </p>

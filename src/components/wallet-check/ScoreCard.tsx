@@ -5,10 +5,9 @@ import type { APIResponse } from '../../types/api';
 
 interface ScoreCardProps {
   data: APIResponse;
-  locale: string;
 }
 
-export const ScoreCard: React.FC<ScoreCardProps> = ({ data, locale = 'en' }) => {
+export const ScoreCard: React.FC<ScoreCardProps> = ({ data }) => {
   const getScoreColor = (score: number) => {
     if (score >= 80) return 'text-green-500';
     if (score >= 60) return 'text-yellow-500';

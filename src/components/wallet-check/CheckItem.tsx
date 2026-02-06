@@ -6,10 +6,22 @@ import type { CheckResult } from '../../types/api';
 
 interface CheckItemProps {
   check: CheckResult;
-  locale: string;
 }
 
-export const CheckItem: React.FC<CheckItemProps> = ({ check, locale = 'en' }) => {
+function getEtherscanURL(address: string): string {
+  return `https://etherscan.io/address/${address}`
+}
+
+function getGoPlusUrl(address: string): string {
+  return `https://console.gopluslabs.io/token-security/1/${address}`
+}
+
+function splitNftAndGetEtherscanURL(combination: string): string {
+  const [address] = combination.split(':')
+  return getEtherscanURL(address)
+}
+
+export const CheckItem: React.FC<CheckItemProps> = ({ check }) => {
   const config = CHECK_CONFIG[check.check_name as keyof typeof CHECK_CONFIG];
   const riskConfig = RISK_LEVELS[check.risk_level];
 
@@ -24,8 +36,12 @@ export const CheckItem: React.FC<CheckItemProps> = ({ check, locale = 'en' }) =>
                 <span className="text-sm text-gray-500">({asset.symbol})</span>
               </div>
               <div className="text-right">
-                <div className="text-sm">${asset.usd_value.toFixed(2)}</div>
-                <div className="text-xs text-gray-500">{asset.balance.toFixed(4)} {asset.symbol}</div>
+                <div className="text-sm">
+                  ${asset.usd_value.toFixed(2)}
+                </div>
+                <div className="text-xs text-gray-500">
+                  {asset.balance.toFixed(4)} {asset.symbol}
+                </div>
               </div>
             </div>
           ))}
@@ -47,9 +63,8 @@ export const CheckItem: React.FC<CheckItemProps> = ({ check, locale = 'en' }) =>
                 )}
               </div>
               <div className="mt-1 text-xs text-gray-600">
-                <div>Spender: {approval.spender_address}</div>
-                <a href={approval.spender_url} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
-                  View on Etherscan
+                <a href={getEtherscanURL(approval.spender_address)} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
+                  View Spender on Etherscan
                 </a>
               </div>
             </div>
@@ -63,7 +78,18 @@ export const CheckItem: React.FC<CheckItemProps> = ({ check, locale = 'en' }) =>
         <div className="mt-3 space-y-1">
           {(check.raw_data as string[]).map((item: string, index: number) => (
             <div key={index} className="flex justify-between items-center p-2 bg-gray-50 rounded">
-              <span className="text-sm font-mono">{item}</span>
+              <span className="text-sm font-mono">
+                <a href={splitNftAndGetEtherscanURL(item)} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
+                  View on Etherscan
+                </a>
+              </span>
+              { check.check_name === 'scam_tokens' && (
+                <span className="text-sm font-mono">
+                <a href={getGoPlusUrl(item)} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
+                  View on GoPlus
+                </a>
+              </span>
+              )}
             </div>
           ))}
         </div>
@@ -76,21 +102,23 @@ export const CheckItem: React.FC<CheckItemProps> = ({ check, locale = 'en' }) =>
   return (
     <Card className="w-full mb-4 hover:shadow-md transition-shadow">
       <CardHeader className="p-4">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-3">
+        <div className="flex justify-between items-start gap-3">
+          <div className="flex items-center space-x-3 flex-1">
             <div className="text-2xl">{config.icon}</div>
             <div>
               <h3 className="font-semibold text-lg">
-                {config.title[locale as keyof typeof config.title]}
+                {config.title}
               </h3>
               <p className="text-sm text-gray-500">
-                {config.description[locale as keyof typeof config.description]}
+                {config.description}
               </p>
             </div>
           </div>
-          <Badge riskLevel={check.risk_level} className="text-sm">
-            {riskConfig.label[locale as keyof typeof riskConfig.label]}
-          </Badge>
+          <div className="flex-shrink-0">
+            <Badge riskLevel={check.risk_level} className="text-sm">
+              {riskConfig.label}
+            </Badge>
+          </div>
         </div>
       </CardHeader>
       <CardContent className="p-4 pt-0">

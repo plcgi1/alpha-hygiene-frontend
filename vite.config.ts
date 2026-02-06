@@ -9,8 +9,14 @@ export default defineConfig({
       '/api': {
         target: 'http://localhost:8080',
         changeOrigin: true,
-        // rewrite: (path) => path.replace(/^\/api/, ''),
       },
     },
+    allowedHosts: [
+      'trickiest-anjelica-fustier.ngrok-free.dev',
+      'localhost:5173',
+      '0.0.0.0:5173',
+      '127.0.0.1:5173',
+      'trickiest-anjelica-fustier.ngrok-free.app',
+    ]
   },
 })
